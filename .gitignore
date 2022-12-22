@@ -2,4 +2,4 @@
 .DS_store
 out/
 *.iml
-src/Inputs
+src/inputs

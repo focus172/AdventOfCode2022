@@ -1,9 +1,7 @@
-package Days;
+package days;
 
-import Helpers.FileUtils;
+import helpers.FileUtils;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.TreeSet;
 
 public class Day1 {

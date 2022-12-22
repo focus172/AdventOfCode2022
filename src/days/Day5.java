@@ -1,8 +1,7 @@
-package Days;
+package days;
 
-import Helpers.FileUtils;
+import helpers.FileUtils;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Stack;
 

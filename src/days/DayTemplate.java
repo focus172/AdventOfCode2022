@@ -1,6 +1,6 @@
-package Days;
+package days;
 
-import Helpers.FileUtils;
+import helpers.FileUtils;
 
 public class DayTemplate {
     public static void main (String [] args) {

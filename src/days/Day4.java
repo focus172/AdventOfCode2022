@@ -1,6 +1,6 @@
-package Days;
+package days;
 
-import Helpers.FileUtils;
+import helpers.FileUtils;
 
 public class Day4 {
     public static void main (String [] args) {

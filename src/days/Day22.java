@@ -1,7 +1,7 @@
-package Days;
+package days;
 
-import Helpers.Day22Maze;
-import Helpers.FileUtils;
+import helpers.Day22Maze;
+import helpers.FileUtils;
 
 public class Day22 {
     public static void main (String [] args) {
