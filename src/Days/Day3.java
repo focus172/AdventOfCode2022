@@ -4,15 +4,9 @@ import Helpers.FileUtils;
 
 public class Day3 {
     public static void main (String [] args) {
-        /*
-        String garbage = "abcdefgxyzABCEDXYZ";
-        for (int i = 0; i < garbage.length(); i++) {
-            System.out.println(scoreOf(garbage.charAt(i)));
-        }
-        */
-        String[][] parsedData = parsedData(rawData());
-        System.out.println("Problem 1: " + problem1(parsedData));
-        System.out.println("Problem 2: " + problem2());
+        String raw = rawData();
+        System.out.println("Problem 1: " + problem1(parsedData(raw)));
+        System.out.println("Problem 2: " + problem2(part2Data(raw)));
     }
 
     private static int problem1(String[][] parsedData) {
@@ -24,9 +18,23 @@ public class Day3 {
         return sum;
     }
 
-    private static int problem2() {
-
-        return 0;
+    private static int problem2(String[] inData) {
+        int sum = 0;
+        for (int set = 0; set < inData.length; set += 3) {
+            //char[] quickData = inData[set].toCharArray();
+            String elf1 = inData[set];
+            String elf2 = inData[set+1];
+            String elf3 = inData[set+2];
+            boolean shouldCount = true;
+            for (char letter : elf1.toCharArray()) {
+                String check = String.valueOf(letter);
+                if (shouldCount && elf2.contains(check) && elf3.contains(check)) {
+                    sum += scoreOf(letter);
+                    shouldCount = false;
+                }
+            }
+        }
+        return sum;
     }
 
     private static char findDuplicate(String[] input) {
@@ -40,7 +48,7 @@ public class Day3 {
     }
 
     private static int scoreOf(char input) {
-        int temp = (int)input;
+        int temp = input;
         temp -= 64;
         if (temp <= 26) { return temp+26;}
         else { return (int)input - 96; }
@@ -54,6 +62,10 @@ public class Day3 {
             out[i][1] = lines[i].substring(lines[i].length()/2);
         }
         return out;
+    }
+
+    private static String[] part2Data(String data) {
+        return data.split("\n");
     }
 
     private static String rawData() {

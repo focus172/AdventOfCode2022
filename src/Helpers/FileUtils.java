@@ -8,7 +8,7 @@ public class FileUtils {
         try {
             return new String(Files.readAllBytes(Paths.get(filePath)));
         } catch (Exception e) {
-            System.out.println("opps");
+            System.out.println("oops");
             return "";
         }
     }
