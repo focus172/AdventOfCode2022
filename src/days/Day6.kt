@@ -26,9 +26,9 @@ object Day6 {
         return -1
     }
 
-    private fun isPacket(fourChar: String): Boolean {
+    private fun isPacket(charStream: String): Boolean {
         val letterMap: HashMap<Char, Boolean> = HashMap()
-        for (letter in fourChar) {
+        for (letter in charStream) {
             if (letterMap.contains(letter)) {
                 return false;
             }
