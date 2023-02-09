@@ -14,6 +14,7 @@ object Day25 {
     private fun problem1(datelines: List<String>): String {
         var sum: Long = 0
         for (line in datelines) {
+            //val lineAsInt = Integer.parseInt(line)
             val curSNAFU = Day25SNAFUNumber(line)
             sum += curSNAFU.value
         }
@@ -24,3 +25,4 @@ object Day25 {
         return FileUtils.fileToString("src/inputs/Day25Input.txt")
     }
 }
+
