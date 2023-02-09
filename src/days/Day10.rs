@@ -103,12 +103,13 @@ fn countWhenValid(total: &mut i32, cycle: &i32, registerx: &i32) {
 // @param input a list of instructions that are either a noop or a addx
 fn problem2(input: &Vec<String>) -> Vec<String> {
     const SCREEN_WIDTH: i32 = 40;
+    const START_CYCLE: i32 = 0;
 
     // the output array that will be built through the process
     let mut screenOutput = Vec::<String>::new();
 
     let mut registerx = 1;
-    let mut cycle = 1;
+    let mut cycle = START_CYCLE+1;
 
     let mut currentRow: String = String::new();
 
@@ -120,36 +121,45 @@ fn problem2(input: &Vec<String>) -> Vec<String> {
         // parsing the instructions
         match instruction {
             "addx" => {
+                renderPixel(&mut currentRow, &registerx, &cycle, &mut screenOutput, &SCREEN_WIDTH, &START_CYCLE);
                 cycle += 1;
-                renderPixel(&mut currentRow, &registerx, &cycle, &mut screenOutput, &SCREEN_WIDTH);
+                
 
                 let value = split.next().unwrap().parse::<i32>().unwrap();
                 registerx += value;
 
+                renderPixel(&mut currentRow, &registerx, &cycle, &mut screenOutput, &SCREEN_WIDTH, &START_CYCLE);
                 cycle += 1;
-                renderPixel(&mut currentRow, &registerx, &cycle, &mut screenOutput, &SCREEN_WIDTH);
+                
             },
             "noop" => {
+                renderPixel(&mut currentRow, &registerx, &cycle, &mut screenOutput, &SCREEN_WIDTH, &START_CYCLE);
                 cycle += 1;
-
-                renderPixel(&mut currentRow, &registerx, &cycle, &mut screenOutput, &SCREEN_WIDTH);
             },
             _ => {
                 println!("Error: invalid instruction");
             }
         }
     }
+    renderPixel(&mut currentRow, &registerx, &cycle, &mut screenOutput, &SCREEN_WIDTH, &START_CYCLE);
 
     return screenOutput;
 }
 
 
-fn renderPixel(currentRow: &mut String, registerx: &i32, cycle: &i32, screenOutput: &mut Vec<String>, screen_width: &i32) {
+fn renderPixel(currentRow: &mut String, registerx: &i32, cycle: &i32, screenOutput: &mut Vec<String>, screen_width: &i32, start_cycle: &i32) {
 
     // the value of the register is the x position of the pixie
     // the pixie is 3 pixels wide and occupies the entire hieght of the screen
     // the cycle is what pixel is being rendered on the screen
     // each row has 'screen_width' pixels and so going over that number will wrap around to the next row
+
+    // if the current row is full then add it to the output array
+    // and reset the current row
+    if cycle % screen_width == *start_cycle {
+        screenOutput.push(currentRow.clone());
+        currentRow.clear();
+    }
 
     // if the pixie is within the current row then add "#" to the current row
     // if not then add "." to the current row
@@ -159,12 +169,7 @@ fn renderPixel(currentRow: &mut String, registerx: &i32, cycle: &i32, screenOutp
         currentRow.push_str(".");
     }
 
-    // if the current row is full then add it to the output array
-    // and reset the current row
-    if cycle % screen_width == 1 {
-        screenOutput.push(currentRow.clone());
-        currentRow.clear();
-    }
+    
     
 }
 
