@@ -1,7 +1,6 @@
-.idea
-.DS_store
-out/
-*.iml
-src/inputs
 /target
-Cargo.*
+inputs
+Cargo.lock
+obj
+bin
+AdventOfCode2022.csproj

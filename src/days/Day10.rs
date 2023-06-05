@@ -1,12 +1,9 @@
-use std::path;
-use std::fs::File;
-use std::io::{BufReader, BufRead, Error};
+use std::fs;
+use std::io::Error;
 
-pub fn main() {
+pub fn main() -> Result<(), Error> {
     //https://textkool.com/en/test-ascii-art-generator
 
-
-    // prints block text reading "Day 10"
     println!("
 ██████╗  █████╗ ██╗   ██╗     ██╗ ██████╗ 
 ██╔══██╗██╔══██╗╚██╗ ██╔╝    ███║██╔═████╗
@@ -17,17 +14,7 @@ pub fn main() {
     ");
 
 
-    // gets the input from the file in the form of a vector of strings
-    let wrapped_input = read_from_file_to_lines("./src/inputs/Day10Input.txt");
-
-    // unwraps the input and prints an error if it fails
-    let input = match wrapped_input {
-        Ok(input) => input,
-        Err(error) => {
-            println!("Error: {}", error);
-            return;
-        }
-    };
+    let input = fs::read_to_string("./inputs/Day10Input.txt")?;
 
     // gets the answer to the first problem
     let answer1 = problem1(&input);
@@ -41,26 +28,28 @@ pub fn main() {
     for line in answer2 {
         println!("{}", line);
     }
+
+    Ok(())
 }
 
 // this code is responsible for keeping track on one counter as it runs through the input
 // each input can either change the counter by some value or do nothing
 // at the 20th operation and every 40th operation after that the counters value is multiplied by the number of operations add added to a total
 // the total is then returned
-fn problem1(input: &Vec<String>) -> String {
+fn problem1(input: &String) -> String {
     let mut registerx = 1;
     let mut total = 0;
     let mut cycle = 1;
 
     // iterates through the input counting each one as a operation
     // operations that take additional time are handled withing the loop
-    for operation in input {
+    for line in input.lines() {
         
         // check at the start of a cycle if the counter is valid
         countWhenValid(&mut total, &cycle, &registerx);
 
         // parse the operation into an instruction
-        let mut split = operation.split_whitespace();
+        let mut split = line.split_whitespace();
         let instruction = split.next().unwrap();
 
         // if the instruction is noop then just add one to the counter
@@ -101,7 +90,7 @@ fn countWhenValid(total: &mut i32, cycle: &i32, registerx: &i32) {
 
 // @dev builds an output array that mimics the way a crt works
 // @param input a list of instructions that are either a noop or a addx
-fn problem2(input: &Vec<String>) -> Vec<String> {
+fn problem2(input: &String) -> Vec<String> {
     const SCREEN_WIDTH: i32 = 40;
     const START_CYCLE: i32 = 0;
 
@@ -113,9 +102,12 @@ fn problem2(input: &Vec<String>) -> Vec<String> {
 
     let mut currentRow: String = String::new();
 
-    for operation in input {
+    // explian with this needs to exist for the code to function as intended
+    renderPixel(&mut currentRow, &registerx, &cycle, &mut screenOutput, &SCREEN_WIDTH, &START_CYCLE);
+
+    for line in input.lines() {
         // parse the operation into an instruction
-        let mut split = operation.split_whitespace();
+        let mut split = line.split_whitespace();
         let instruction = split.next().unwrap();
 
         // parsing the instructions
@@ -141,7 +133,6 @@ fn problem2(input: &Vec<String>) -> Vec<String> {
             }
         }
     }
-    renderPixel(&mut currentRow, &registerx, &cycle, &mut screenOutput, &SCREEN_WIDTH, &START_CYCLE);
 
     return screenOutput;
 }
@@ -171,30 +162,4 @@ fn renderPixel(currentRow: &mut String, registerx: &i32, cycle: &i32, screenOutp
 
     
     
-}
-
-fn read_from_file_to_lines(filename: &str) -> Result<Vec<String>, Error> {
-    // gets the pat of the file
-    let path = path::Path::new(filename);
-
-    println!("Reading from file: {}...", filename);
-
-    // get the file from the path 
-    let wrappped_file = File::open(&path);
-    let file = match wrappped_file {
-        Ok(file) => file,
-        Err(error) => return Err(error),
-    };
-
-    // create a buffered reader to read the file
-    let reader = BufReader::new(file);
-
-    // iterate through the lines of the file and add them to a vector
-    let mut lines: Vec<String> = Vec::new();
-    reader.lines().for_each(|line| {
-        lines.push(line.unwrap());
-    });
-
-    // return the vector
-    return Ok(lines)
 }

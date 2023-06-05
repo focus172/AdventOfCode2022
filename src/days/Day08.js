@@ -15,7 +15,6 @@ function problem1(dataLines) {
         for (let c = 0; c < line.length; c++) {
             let value = line[c];
             if (value > maxFound) {
-                //console.log("adding " + r+", "+c + " because " + value + " > " + maxFound)
                 positionMap.set(r+", "+c, true)
                 maxFound = value
             }
@@ -29,7 +28,6 @@ function problem1(dataLines) {
         for (let c = line.length-1; c >= 0 ; c--) {
             let value = line[c];
             if (value > maxFound) {
-                //console.log("adding " + r+", "+c + " because " + value + " > " + maxFound)
                 positionMap.set(r+", "+c, true)
                 maxFound = value
             }
@@ -43,7 +41,6 @@ function problem1(dataLines) {
             let line = dataLines[r];
             let value = line[c];
             if (value > maxFound) {
-                //console.log("adding " + r+", "+c + " because " + value + " > " + maxFound)
                 positionMap.set(r+", "+c, true)
                 maxFound = value
             }
@@ -56,7 +53,6 @@ function problem1(dataLines) {
             let line = dataLines[r];
             let value = line[c];
             if (value > maxFound) {
-                //console.log("adding " + r+", "+c + " because " + value + " > " + maxFound)
                 positionMap.set(r+", "+c, true)
                 maxFound = value
             }
@@ -82,10 +78,7 @@ function problem2(dataLines) {
             var score = fromBottom * fromLeft * fromTop * fromRight;
 
             if (score > maxFound) {
-                console.log(" >> x: "+ c + ", y: "+ r)
-                console.log("fromTop: " + fromTop + "\nfromBottom: " + fromBottom + "\nfromLeft: " + fromLeft + "\nfromRight: " + fromRight + "\n > score: " + score);
                 maxFound = score
-                console.log(maxFound)
             }
         }
     }
@@ -146,7 +139,7 @@ function toArray(rawData) {
 
 function fileToString() {
     var fs = require("fs")
-    var text = fs.readFileSync("/Users/evanstokdyk/code/AdventOfCode2022/src/inputs/Day8Input.txt").toString('utf-8')
+    var text = fs.readFileSync("./inputs/8").toString('utf-8')
     return text
 }
 
