@@ -1,6 +1,3 @@
 /target
-inputs
+/*/inputs
 Cargo.lock
-obj
-bin
-AdventOfCode2022.csproj

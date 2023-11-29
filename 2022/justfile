@@ -1,0 +1,19 @@
+default:
+    @just -l
+
+all: day08 day09 day10 day13 day15
+
+day08:
+    node src/days/day08.js
+
+day09:
+    cargo run -q --bin 2022-09
+
+day10:
+    cargo run -q --bin 2022-10
+
+day13:
+    cargo run -q --bin 2022-13
+
+day15:
+    cargo run -q --bin 2022-15

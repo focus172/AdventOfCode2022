@@ -1,6 +1,7 @@
-
 var raw = fileToString()
 var dataArray = toArray(raw)
+
+console.log("Day 8.");
 console.log("Problem 1: " + problem1(dataArray));
 console.log("Problem 2: " + problem2(dataArray));
 
@@ -142,4 +143,3 @@ function fileToString() {
     var text = fs.readFileSync("./inputs/8").toString('utf-8')
     return text
 }
-

@@ -1,10 +1,7 @@
-package days;
-
-import helpers.FileUtils;
-
 import java.util.TreeSet;
+import lib.FileUtils;
 
-public class Day1 {
+class Day1 {
     public static void main(String[] args) {
 
         //yes I know I input the data twice and that is very unoptimal but i don't care

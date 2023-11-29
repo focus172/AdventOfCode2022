@@ -1,9 +1,8 @@
-package days
-
-import helpers.FileUtils
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 object Day6 {
-    @JvmStatic
+    // @JvmStatic
     fun main(args: Array<String>) {
         val raw = rawData()
         println("Problem 1: " + problem1(raw))
@@ -38,6 +37,7 @@ object Day6 {
     }
 
     private fun rawData(): String {
-        return FileUtils.fileToString("src/inputs/Day6Input.txt")
+        return Files.readAllBytes(Paths.get("./inputs/6")).concatToString();
+        // return FileUtils.fileToString("src/inputs/Day6Input.txt")
     }
 }
