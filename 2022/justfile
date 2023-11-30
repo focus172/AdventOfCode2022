@@ -16,4 +16,5 @@ day13:
     cargo run -q --bin 2022-13
 
 day15:
-    cargo run -q --bin 2022-15
+    # requires optimizations to run in a reasonable time
+    cargo run --release -q --bin 2022-15

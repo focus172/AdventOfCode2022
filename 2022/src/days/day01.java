@@ -1,5 +1,6 @@
 import java.util.TreeSet;
-import lib.FileUtils;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 class Day1 {
     public static void main(String[] args) {
@@ -43,8 +44,8 @@ class Day1 {
             }
         }
 
-        //debug code
-        //System.out.println(top3Tree.toString());
+        // debug code
+        // System.out.println(top3Tree.toString());
 
         int retVaue = 0;
         for (Integer best : top3Tree) {
@@ -55,6 +56,6 @@ class Day1 {
     }
 
     private static String rawData() {
-        return FileUtils.fileToString("src/Inputs/Day1Input.txt");
+        return new String(Files.readAllBytes(Paths.get("/home/focus/code/aoc/2022/inputs/01")));
     }
 }
