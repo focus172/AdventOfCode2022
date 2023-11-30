@@ -1,8 +1,7 @@
-package days;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
-import helpers.FileUtils;
-
-public class Day4 {
+public class day04 {
     public static void main (String [] args) {
         String raw = rawData();
         System.out.println("Problem 1: " + problem1(parseData(raw)));
@@ -62,6 +61,10 @@ public class Day4 {
     }
 
     private static String rawData() {
-        return FileUtils.fileToString("src/Inputs/Day4Input.txt");
+        try {
+            return new String(Files.readAllBytes(Paths.get("./inputs/04")));
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

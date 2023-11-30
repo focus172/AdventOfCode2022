@@ -1,18 +1,26 @@
+// package build;
+
 import java.util.TreeSet;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-class Day1 {
-    public static void main(String[] args) {
+public class day01 {
+    private String input;
 
-        //yes I know I input the data twice and that is very unoptimal but i don't care
-        System.out.println("Problem 1: " + problem1());
+    public day01() {
+        this.input = data();
+    }
+
+    public static void main(String[] args) {
+        day01 runner = new day01();
+
+        System.out.println("Day 1.");
+        System.out.println("Problem 1: " + runner.p1());
         System.out.println("Problem 2: " + problem2());
     }
 
-    private static int problem1() {
-        String data = rawData();
-        String[] elfData = data.split("\n\n");
+    public int p1() {
+        String[] elfData = this.input.split("\n\n");
 
         int max = 0;
         for (String dataSet : elfData) {
@@ -27,8 +35,8 @@ class Day1 {
         return max;
     }
 
-    private static int problem2() {
-        String data = rawData();
+    public static int problem2() {
+        String data = data();
         String[] elfData = data.split("\n\n");
 
         TreeSet<Integer> top3Tree = new TreeSet<Integer>();
@@ -55,7 +63,12 @@ class Day1 {
         return retVaue;
     }
 
-    private static String rawData() {
-        return new String(Files.readAllBytes(Paths.get("/home/focus/code/aoc/2022/inputs/01")));
+    private static String data() {
+        try {
+            return new String(Files.readAllBytes(Paths.get("./inputs/01")));
+        } catch (Exception e) {
+            System.out.println(e);
+            return "";
+        }
     }
 }

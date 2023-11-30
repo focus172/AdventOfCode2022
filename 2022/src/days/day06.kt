@@ -1,5 +1,4 @@
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.File
 
 object Day6 {
     // @JvmStatic
@@ -18,9 +17,8 @@ object Day6 {
     }
 
     private fun problemSolver(rawData: String, depth: Int): Int {
-        for(i in 0..rawData.length) { //this will go out of bounds sometimes
-            if (isPacket(rawData.substring(i, i+depth)))
-                return i+depth
+        for (i in 0..rawData.length) { // this will go out of bounds sometimes
+            if (isPacket(rawData.substring(i, i + depth))) return i + depth
         }
         return -1
     }
@@ -29,7 +27,7 @@ object Day6 {
         val letterMap: HashMap<Char, Boolean> = HashMap()
         for (letter in charStream) {
             if (letterMap.contains(letter)) {
-                return false;
+                return false
             }
             letterMap.put(letter, true)
         }
@@ -37,7 +35,8 @@ object Day6 {
     }
 
     private fun rawData(): String {
-        return Files.readAllBytes(Paths.get("./inputs/6")).concatToString();
-        // return FileUtils.fileToString("src/inputs/Day6Input.txt")
+        return File("./inputs/06").useLines {
+            it.elementAt(0)
+        }
     }
 }

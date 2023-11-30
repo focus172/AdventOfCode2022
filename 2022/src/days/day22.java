@@ -89,8 +89,6 @@ public class Day22Maze {
 
 
     public void move(String command) {
-
-
         for (int i = 0; i < Integer.parseInt(command); i++) {
             System.out.println(x + ", " + y);
             if (facing == 0) {

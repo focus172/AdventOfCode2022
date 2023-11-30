@@ -1,12 +1,11 @@
-package days;
-
-import helpers.FileUtils;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import java.util.ArrayList;
 import java.util.Stack;
 
 
-public class Day5 {
+public class day05 {
     public static void main (String [] args) {
         String[] splitData = rawData().split("\n\n");
         String blockData = splitData[0];
@@ -40,6 +39,7 @@ public class Day5 {
 
         StringBuilder retStr = new StringBuilder();
         for (Stack<Character> stack : blockStacks) { retStr.append(stack.peek()); }
+
         return retStr.toString();
     }
 
@@ -125,6 +125,10 @@ public class Day5 {
     }
 
     private static String rawData() {
-        return FileUtils.fileToString("src/Inputs/Day5Input.txt");
+        try {
+            return new String(Files.readAllBytes(Paths.get("./inputs/05")));
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

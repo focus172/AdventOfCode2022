@@ -1,9 +1,8 @@
-package days;
+import java.util.ArrayList;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
-import helpers.Day7TreeObject;
-import helpers.FileUtils;
-
-public class Day7 {
+public class day07 {
     public static void main (String [] args) {
         String raw = rawData();
         String[] lines = outputLines(raw);
@@ -14,20 +13,20 @@ public class Day7 {
 
     private static int problem1(String[] commandLines) {
         // read the data into a tree of objects
-        Day7TreeObject rootDirPointer = makeFileSystem(commandLines);
+        TreeObject rootDirPointer = makeFileSystem(commandLines);
 
         // recurse through the tree to find all the directories
         return recurseProblem1(rootDirPointer);
     }
 
     private static int problem2(String[] commandLines) {
-        Day7TreeObject rootDirPointer = makeFileSystem(commandLines);
+        TreeObject rootDirPointer = makeFileSystem(commandLines);
         final int amountToDelete = 3441553;
 
         return recurseProblem2(rootDirPointer, amountToDelete).size;
     }
 
-    private static int recurseProblem1(Day7TreeObject curDur) {
+    private static int recurseProblem1(TreeObject curDur) {
         // In each directory
         // > check if its size meets the threshold
         // > call on each if children
@@ -38,14 +37,14 @@ public class Day7 {
             if (curDur.size < 100000) {
                 sum += curDur.size;
             }
-            for (Day7TreeObject child : curDur.children) {
+            for (TreeObject child : curDur.children) {
                 sum += recurseProblem1(child);
             }
             return sum;
         }
     }
 
-    private static Day7TreeObject recurseProblem2(Day7TreeObject curDur, int amountToDelete) {
+    private static TreeObject recurseProblem2(TreeObject curDur, int amountToDelete) {
         // we want to find the smallest directory that exceeds amount to delete
         // to do this the base case is if there is no reason to go further
         // a result of null means there were no canidits found
@@ -54,9 +53,9 @@ public class Day7 {
         if (curDur.size < amountToDelete || !curDur.isDir) {
             return null;
         } else {
-            Day7TreeObject bestFound = curDur;
-            for (Day7TreeObject child : curDur.children) {
-                Day7TreeObject candidate = recurseProblem2(child, amountToDelete);
+            TreeObject bestFound = curDur;
+            for (TreeObject child : curDur.children) {
+                TreeObject candidate = recurseProblem2(child, amountToDelete);
                 if (candidate != null && candidate.size < bestFound.size) {
                     bestFound = candidate;
                 }
@@ -67,9 +66,9 @@ public class Day7 {
     }
 
 
-    private static Day7TreeObject makeFileSystem(String[] commandLines) {
-        Day7TreeObject rootDirPointer = new Day7TreeObject("", null, true, 0);
-        Day7TreeObject curDir = rootDirPointer;
+    private static TreeObject makeFileSystem(String[] commandLines) {
+        TreeObject rootDirPointer = new TreeObject("", null, true, 0);
+        TreeObject curDir = rootDirPointer;
         for (String line : commandLines) {
             if (line.startsWith("$")) {
                 String command = line.substring(2, 4);
@@ -78,14 +77,15 @@ public class Day7 {
                     if (argument.equals("..")) {
                         curDir = curDir.parent;
                     } else {
-                        Day7TreeObject newDir = new Day7TreeObject(argument, curDir, true, 0);
+                        TreeObject newDir = new TreeObject(argument, curDir, true, 0);
                         curDir.addChild(newDir);
                         curDir = newDir;
                     }
                 } else if (command.equals("ls")) {
-                    ;
+                    continue;
                 } else {
                     System.out.println("Bad command");
+                    return null;
                 }
             } else {
                 if (line.startsWith("dir")) {
@@ -93,7 +93,7 @@ public class Day7 {
                 } else {
                     String[] arguments = line.split(" ");
                     int size = Integer.parseInt(arguments[0]);
-                    Day7TreeObject newFile = new Day7TreeObject(arguments[1], curDir, false, size);
+                    TreeObject newFile = new TreeObject(arguments[1], curDir, false, size);
                     curDir.addChild(newFile);
                 }
             }
@@ -107,22 +107,24 @@ public class Day7 {
     }
 
     private static String rawData() {
-        return FileUtils.fileToString("src/Inputs/Day7Input.txt");
+        try {
+            return new String(Files.readAllBytes(Paths.get("./inputs/07")));
+        } catch (Exception e) {
+            return null;
+        }
     }
 }
 
-import java.util.ArrayList;
 
-public class Day7TreeObject {
-
+class TreeObject {
     public String name;
-    public Day7TreeObject parent;
+    public TreeObject parent;
     public boolean isDir;
-    public ArrayList<Day7TreeObject> children;
+    public ArrayList<TreeObject> children;
 
     public int size; // this includes all the children
 
-    public Day7TreeObject (String name, Day7TreeObject parent, Boolean isDir, int size) {
+    public TreeObject (String name, TreeObject parent, Boolean isDir, int size) {
         this.name = name;
         this.parent = parent;
         this.isDir = isDir;
@@ -131,7 +133,7 @@ public class Day7TreeObject {
         children = new ArrayList<>();
     }
 
-    public boolean addChild(Day7TreeObject child) {
+    public boolean addChild(TreeObject child) {
         children.add(child);
         return true;
     }
@@ -139,7 +141,7 @@ public class Day7TreeObject {
     public int getSize() {
         if (isDir) {
             int sum = 0;
-            for (Day7TreeObject child: children) {
+            for (TreeObject child: children) {
                 sum += child.getSize();
             }
             size = sum;
@@ -149,5 +151,29 @@ public class Day7TreeObject {
         }
 
     }
-
 }
+
+// class Result<T, E> {
+//     public T ok;
+//     public E err;
+//
+//     public Result(T ok) {
+//         this.ok = ok;
+//         this.err = null;
+//     }
+//
+//     public T unwrap() throws Exception {
+//         if (this.err != null) {
+//             throw new Exception("Unwrapped error: " + this.err);
+//         }
+//         return this.ok;
+//     }
+//
+//     public T unwrap_or(T alt) {
+//         if (this.ok != null) {
+//             this.ok
+//         } else {
+//             alt
+//         }
+//     }
+// }
