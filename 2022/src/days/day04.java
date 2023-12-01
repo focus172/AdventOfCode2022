@@ -62,7 +62,7 @@ public class day04 {
 
     private static String rawData() {
         try {
-            return new String(Files.readAllBytes(Paths.get("./inputs/04")));
+            return new String(Files.readAllBytes(Paths.get("./input/04")));
         } catch (Exception e) {
             return null;
         }

@@ -35,14 +35,14 @@ use std::{collections::HashMap, str::FromStr, sync::LazyLock};
 // Consult the report from the sensors you just deployed. In the row where
 // y=2000000, how many positions cannot contain a beacon?
 pub fn main() -> eyre::Result<()> {
-    color_eyre::install()?;
+    resu::install()?;
 
-    let input = include_str!("../../inputs/15");
+    let input = include_str!("../../input/15");
 
     println!("Day 15.");
 
-    println!("Problem 1: {}", p1(&input)?);
-    println!("Problem 2: {}", p2(&input)?);
+    println!("Problem 1: {}", p1(input)?);
+    println!("Problem 2: {}", p2(input)?);
 
     Ok(())
 }
@@ -127,7 +127,7 @@ fn p2(input: &str) -> eyre::Result<usize> {
                 .collect::<Vec<_>>()
         })
         .fold(HashMap::<isize, Vec<_>>::new(), |mut cols, (col, range)| {
-            if col < 0 || col > 4_000_000 {
+            if (0..=4_000_000).contains(&col) {
                 return cols;
             }
 

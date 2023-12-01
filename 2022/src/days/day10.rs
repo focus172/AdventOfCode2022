@@ -1,4 +1,3 @@
-use std::fs;
 use aoc_2022::*;
 
 // https://textkool.com/en/test-ascii-art-generator
@@ -12,15 +11,15 @@ const __DAY_HEADER: &str = "
 ";
 
 pub fn main() -> eyre::Result<()> {
-    let input = fs::read_to_string("./inputs/10")?;
+    let input = include_str!("../../input/10");
 
     // gets the answer to the second problem
 
     println!("Day 10.");
 
     // outputs the answers to IO
-    println!("Problem 1: {}", p1(&input)?);
-    println!("Problem 2: {}", p2(&input)?);
+    println!("Problem 1: {}", p1(input)?);
+    println!("Problem 2: {}", p2(input)?);
 
     Ok(())
 }
@@ -29,7 +28,7 @@ pub fn main() -> eyre::Result<()> {
 // each input can either change the counter by some value or do nothing
 // at the 20th operation and every 40th operation after that the counters value is multiplied by the number of operations add added to a total
 // the total is then returned
-fn p1(input: &String) -> eyre::Result<isize> {
+fn p1(input: &str) -> eyre::Result<isize> {
     let mut total = 0;
 
     let mut registerx = 1;
@@ -141,8 +140,8 @@ fn render_pixel(
     // if the pixie is within the current row then add "#" to the current row
     // if not then add "." to the current row
     if registerx - 1 <= cycle % SCREEN_WIDTH && cycle % SCREEN_WIDTH <= registerx + 1 {
-        current_row.push_str("#");
+        current_row.push('#');
     } else {
-        current_row.push_str(".");
+        current_row.push('.');
     }
 }

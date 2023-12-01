@@ -65,7 +65,7 @@ public class day01 {
 
     private static String data() {
         try {
-            return new String(Files.readAllBytes(Paths.get("./inputs/01")));
+            return new String(Files.readAllBytes(Paths.get("./input/01")));
         } catch (Exception e) {
             System.out.println(e);
             return "";

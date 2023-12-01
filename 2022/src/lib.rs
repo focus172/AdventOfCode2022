@@ -1,6 +1,6 @@
 #![feature(try_trait_v2)]
 
-pub use color_eyre::eyre;
+pub use resu::eyre;
 pub use std::io;
 
 // pub struct W<T>(T);

@@ -1,6 +1,6 @@
-use std::ops::{AddAssign, Sub, SubAssign};
-use std::{collections::HashSet, fs, str::FromStr};
 use aoc_2022::*;
+use std::ops::{AddAssign, Sub, SubAssign};
+use std::{collections::HashSet, str::FromStr};
 
 const __DAY_HEADER: &str = "
 ██████╗  █████╗ ██╗   ██╗     ██████╗  █████╗
@@ -11,14 +11,13 @@ const __DAY_HEADER: &str = "
 ╚═════╝ ╚═╝  ╚═╝   ╚═╝        ╚═════╝  ╚════╝
 ";
 
-
 pub fn main() -> eyre::Result<()> {
     println!("Day 9.");
 
-    let input = fs::read_to_string("./inputs/9")?;
+    let input = include_str!("../../input/09");
 
-    println!("Problem 1: {}", p1(&input)?);
-    println!("Problem 2: {}", p2(&input)?);
+    println!("Problem 1: {}", p1(input)?);
+    println!("Problem 2: {}", p2(input)?);
 
     Ok(())
 }
@@ -31,7 +30,7 @@ fn p1(input: &str) -> eyre::Result<usize> {
     let mut tail = Point::new(0, 0);
 
     for line in input.lines() {
-        let split = line.split(" ").collect::<Vec<&str>>();
+        let split = line.split(' ').collect::<Vec<&str>>();
         let transform: Point = split[0].parse().unwrap();
         let repititions = split[1].parse::<i32>().unwrap();
 
@@ -89,7 +88,7 @@ impl Sub for Point {
     type Output = Point;
 
     fn sub(mut self, rhs: Self) -> Self::Output {
-        self += rhs;
+        self -= rhs;
         self
     }
 }

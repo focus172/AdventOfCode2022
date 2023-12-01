@@ -103,7 +103,7 @@ public class day02 {
 
     private static String rawData() {
         try {
-            return new String(Files.readAllBytes(Paths.get("./inputs/02")));
+            return new String(Files.readAllBytes(Paths.get("./input/02")));
         } catch (Exception e) {
             System.out.println(e);
             return "";

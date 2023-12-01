@@ -1,7 +1,6 @@
 use aoc_2022::*;
 use std::{
     cmp::Ordering,
-    fs,
     io::{self, Read},
     str::FromStr,
 };
@@ -22,12 +21,12 @@ use std::{
 // other lists). Each packet is always a list and appears on its own line.
 //
 pub fn main() -> eyre::Result<()> {
-    let input = fs::read_to_string("./inputs/13")?;
+    let input = include_str!("../../input/13");
 
     println!("Day 13.");
 
-    println!("Problem 1: {}", p1(&input)?);
-    println!("Problem 2: {}", p2(&input)?);
+    println!("Problem 1: {}", p1(input)?);
+    println!("Problem 2: {}", p2(input)?);
 
     Ok(())
 }
@@ -109,7 +108,7 @@ fn p2(input: &str) -> eyre::Result<usize> {
         .lines()
         .filter(|l| !l.is_empty())
         .chain(sentinels)
-        .map(|l| Ok(l.parse()?))
+        .map(|l| l.parse())
         .collect::<eyre::Result<Vec<Packet>>>()?;
     packets.sort();
     let results = packets
@@ -121,7 +120,7 @@ fn p2(input: &str) -> eyre::Result<usize> {
 
     assert!(results.len() == 2);
 
-    Ok(results.into_iter().fold(1, |a, b| a * b))
+    Ok(results.into_iter().product())
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -190,14 +189,14 @@ impl FromStr for Packet {
                 // let _ = buf.pop();
                 if buf.ends_with(&[b',']) {
                     buf.pop();
-                    let s = String::from_utf8(buf.drain(..).collect())?;
+                    let s = String::from_utf8(std::mem::take(&mut buf))?;
                     // dbg!(&s);
                     items.push(s.parse()?);
                 }
             }
 
             if !buf.is_empty() {
-                let s = String::from_utf8(buf.drain(..).collect())?;
+                let s = String::from_utf8(std::mem::take(&mut buf))?;
                 // dbg!(&s);
                 items.push(s.parse()?);
             }
@@ -301,8 +300,8 @@ impl Ord for Packet {
         match (self, other) {
             (Self::Single(l), Self::Single(r)) => l.cmp(r),
             (Self::Array(l), Self::Array(r)) => {
-                let mut left = l.into_iter();
-                let mut right = r.into_iter();
+                let mut left = l.iter();
+                let mut right = r.iter();
                 loop {
                     let l = left.next();
                     let r = right.next();
@@ -359,7 +358,7 @@ impl<R: Read> ReadWhile for R {
             let [b] = b;
             buf.push(b);
 
-            if f(&buf) {
+            if f(buf) {
                 return Ok(read);
             }
         }

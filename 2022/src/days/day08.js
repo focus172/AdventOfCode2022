@@ -140,6 +140,6 @@ function toArray(rawData) {
 
 function fileToString() {
     var fs = require("fs")
-    var text = fs.readFileSync("./inputs/8").toString('utf-8')
+    var text = fs.readFileSync("./input/08").toString('utf-8')
     return text
 }

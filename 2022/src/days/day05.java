@@ -126,7 +126,7 @@ public class day05 {
 
     private static String rawData() {
         try {
-            return new String(Files.readAllBytes(Paths.get("./inputs/05")));
+            return new String(Files.readAllBytes(Paths.get("./input/05")));
         } catch (Exception e) {
             return null;
         }

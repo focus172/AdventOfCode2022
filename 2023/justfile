@@ -1,0 +1,2 @@
+day number:
+    cargo run --bin 2023-{{number}}

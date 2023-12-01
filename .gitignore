@@ -1,4 +1,3 @@
-/target
-/*/inputs
-Cargo.lock
+/*/input
 /*/build
+/target

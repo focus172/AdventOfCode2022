@@ -3,30 +3,40 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class day07 {
-    public static void main (String [] args) {
-        String raw = rawData();
-        String[] lines = outputLines(raw);
+    String input;
+    TreeObject root;
 
-        System.out.println("Problem 1: " + problem1(lines));
-        System.out.println("Problem 2: " + problem2(lines));
+    public static void main (String [] args) throws Exception {
+        day07 runner = new day07();
+
+        System.out.println("Problem 1: " + runner.p1());
+        System.out.println("Problem 2: " + runner.p2());
     }
 
-    private static int problem1(String[] commandLines) {
-        // read the data into a tree of objects
-        TreeObject rootDirPointer = makeFileSystem(commandLines);
+    day07() throws Exception {
+        this.input = get_input();
+        String[] commandLines = this.input.split("\n");
+        this.root = makeFileSystem(commandLines);
+    }
 
+    private int p1() {
+        return this.p1_rec(this.root);
+        // return out.to_string();
+        // return new String(out);
         // recurse through the tree to find all the directories
-        return recurseProblem1(rootDirPointer);
+        // return recurseProblem1(this.root);
     }
 
-    private static int problem2(String[] commandLines) {
+    private int p2() {
+        String[] commandLines = this.input.split("\n");
+
         TreeObject rootDirPointer = makeFileSystem(commandLines);
         final int amountToDelete = 3441553;
 
         return recurseProblem2(rootDirPointer, amountToDelete).size;
     }
 
-    private static int recurseProblem1(TreeObject curDur) {
+    private static int p1_rec(TreeObject curDur) {
         // In each directory
         // > check if its size meets the threshold
         // > call on each if children
@@ -38,7 +48,7 @@ public class day07 {
                 sum += curDur.size;
             }
             for (TreeObject child : curDur.children) {
-                sum += recurseProblem1(child);
+                sum += p1_rec(child);
             }
             return sum;
         }
@@ -102,19 +112,11 @@ public class day07 {
         return rootDirPointer;
     }
 
-    private static String[] outputLines(String rawData) {
-        return rawData.split("\n");
-    }
 
-    private static String rawData() {
-        try {
-            return new String(Files.readAllBytes(Paths.get("./inputs/07")));
-        } catch (Exception e) {
-            return null;
-        }
+    private static String get_input() throws Exception {
+        return new String(Files.readAllBytes(Paths.get("./input/07")));
     }
 }
-
 
 class TreeObject {
     public String name;
