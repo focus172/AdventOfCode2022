@@ -23,6 +23,10 @@ day05:
     javac -d build src/days/day05.java
     java -cp build day05
 
+day06:
+    kotlinc -d build src/days/day06.kt
+    # java -cp build day06
+
 day07:
     javac -d build src/days/day07.java
     java -cp build day05

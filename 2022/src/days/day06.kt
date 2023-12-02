@@ -1,7 +1,8 @@
 import java.io.File
+package build;
 
 object Day6 {
-    // @JvmStatic
+    @JvmStatic
     fun main(args: Array<String>) {
         val raw = rawData()
         println("Problem 1: " + problem1(raw))
@@ -35,7 +36,7 @@ object Day6 {
     }
 
     private fun rawData(): String {
-        return File("./inputs/06").useLines {
+        return File("./input/06").useLines {
             it.elementAt(0)
         }
     }

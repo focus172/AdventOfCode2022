@@ -5,7 +5,12 @@ edition = "2021"
 
 [dependencies]
 resu.workspace = true
+regex.workspace = true
 
 [[bin]]
 name = "2023-01"
 path = "./src/day/01.rs"
+
+[[bin]]
+name = "2023-02"
+path = "./src/day/02.rs"

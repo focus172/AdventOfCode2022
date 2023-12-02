@@ -5,7 +5,7 @@ edition = "2021"
 
 [dependencies]
 resu.workspace = true
-regex = "1"
+regex.workspace = true
 
 [[bin]]
 name = "2022-09"
