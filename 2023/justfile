@@ -1,2 +1,5 @@
 day number:
     cargo run --bin 2023-{{number}}
+
+py number:
+    python src/day/{{number}}.py

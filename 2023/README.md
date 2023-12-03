@@ -1,7 +1,7 @@
 # 2023
 - [X] Day 01 - Rust
-- [ ] Day 02
-- [ ] Day 03
+- [X] Day 02 - Rust
+- [X] Day 03 - Rust
 - [ ] Day 04
 - [ ] Day 05
 - [ ] Day 06
