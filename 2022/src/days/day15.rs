@@ -1,8 +1,11 @@
 #![feature(lazy_cell)]
+#![feature(test)]
 
 use aoc_2022::*;
 use regex::Regex;
 use std::{collections::HashMap, str::FromStr, sync::LazyLock};
+
+const INPUT: &str = include_str!("../../input/15");
 
 // --- Day 15: Beacon Exclusion Zone ---
 //
@@ -35,14 +38,10 @@ use std::{collections::HashMap, str::FromStr, sync::LazyLock};
 // Consult the report from the sensors you just deployed. In the row where
 // y=2000000, how many positions cannot contain a beacon?
 pub fn main() -> eyre::Result<()> {
-    resu::install()?;
-
-    let input = include_str!("../../input/15");
-
     println!("Day 15.");
 
-    println!("Problem 1: {}", p1(input)?);
-    println!("Problem 2: {}", p2(input)?);
+    println!("Problem 1: {}", p1(INPUT)?);
+    println!("Problem 2: {}", p2(INPUT)?);
 
     Ok(())
 }
@@ -207,4 +206,15 @@ impl FromStr for Sensor {
             beacon: (beacon_x, beacon_y),
         })
     }
+}
+
+// #[cfg(bench)]
+mod bench {
+    // extern crate test;
+    // pub use test::Bencher;
+
+    // #[bench]
+    // fn test_a(b: &mut Bencher) {
+    //     b.iter(|| super::p2(""));
+    // }
 }

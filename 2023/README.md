@@ -2,8 +2,8 @@
 - [X] Day 01 - Rust
 - [X] Day 02 - Rust
 - [X] Day 03 - Rust
-- [ ] Day 04
-- [ ] Day 05
+- [X] Day 04 - Rust
+- [X] Day 05 - Rust (NEED SPEED UP)
 - [ ] Day 06
 - [ ] Day 07
 - [ ] Day 08

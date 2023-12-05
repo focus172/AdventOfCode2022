@@ -3,5 +3,5 @@ resolver = "2"
 members = ["2022", "2023"]
 
 [workspace.dependencies]
-resu = { package = "color-eyre", version = "0.6" }
+eyre = "0.6"
 regex = "1"

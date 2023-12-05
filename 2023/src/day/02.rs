@@ -109,7 +109,7 @@ impl Game {
 }
 
 impl FromStr for Game {
-    type Err = resu::Report;
+    type Err = eyre::Report;
 
     // Exaplme input:
     // Game 99: 1 blue, 2 green, 2 red; 2 red, 8 green; 14 green, 1 blue; 1 red, 2 green; 1 blue, 1 green, 2 red; 6 green, 2 red
@@ -134,7 +134,7 @@ struct Round {
 }
 
 impl FromStr for Round {
-    type Err = resu::Report;
+    type Err = eyre::Report;
 
     fn from_str(s: &str) -> std::prelude::v1::Result<Self, Self::Err> {
         let mut ret = Self::default();

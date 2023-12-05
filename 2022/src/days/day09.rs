@@ -8,8 +8,7 @@ const __DAY_HEADER: &str = "
 ██║  ██║███████║ ╚████╔╝     ██║██╔██║╚██████║
 ██║  ██║██╔══██║  ╚██╔╝      ████╔╝██║ ╚═══██║
 ██████╔╝██║  ██║   ██║       ╚██████╔╝ █████╔╝
-╚═════╝ ╚═╝  ╚═╝   ╚═╝        ╚═════╝  ╚════╝
-";
+╚═════╝ ╚═╝  ╚═╝   ╚═╝        ╚═════╝  ╚════╝ ";
 
 pub fn main() -> eyre::Result<()> {
     println!("Day 9.");
@@ -31,8 +30,8 @@ fn p1(input: &str) -> eyre::Result<usize> {
 
     for line in input.lines() {
         let split = line.split(' ').collect::<Vec<&str>>();
-        let transform: Point = split[0].parse().unwrap();
-        let repititions = split[1].parse::<i32>().unwrap();
+        let transform: Point = split[0].parse()?;
+        let repititions = split[1].parse::<i32>()?;
 
         for _ in 0..repititions {
             let temp = head;

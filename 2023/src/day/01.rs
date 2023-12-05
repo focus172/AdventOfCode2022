@@ -30,22 +30,22 @@ fn main() -> Result<()> {
 
     println!("Day 01.");
 
-    println!("Problem 1: {}", p1(input)?);
+    println!("Problem 1: {}", p1(input));
     println!("Problem 1: {}", p2(input)?);
 
     Ok(())
 }
 
-fn p1(input: &str) -> Result<usize> {
-    Ok(input
+fn p1(input: &str) -> usize {
+    input
         .lines()
         .map(|s| {
-            let mut iter = s.chars().filter(|c| c.is_ascii_digit());
-            let first = iter.next().unwrap();
+            let mut iter = s.chars().flat_map(|c| c.to_digit(10));
+            let first = iter.next().expect("each line should contain a number");
             let last = iter.last().unwrap_or(first);
-            first.to_digit(10).unwrap() * 10 + last.to_digit(10).unwrap()
+            first * 10 + last
         })
-        .sum::<u32>() as usize)
+        .sum::<u32>() as usize
 }
 
 // --- Part Two ---
