@@ -1,5 +1,19 @@
+default:
+    @just -l
+
+all:
+    @just day 01
+    @just day 02
+    @just day 03
+    @just day 04
+    # @just day 05 # needs optimization
+
 day number:
-    cargo run --bin 2023-{{number}}
+    cargo run -q --bin 2023-{{number}}
+
+day-06:
+    clang++ src/day/06.cpp -o build/06
+    ./build/06 < ./input/06
 
 py number:
     python src/day/{{number}}.py

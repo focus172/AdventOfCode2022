@@ -1,5 +1,8 @@
-use aoc_2022::*;
-use std::ops::{AddAssign, Sub, SubAssign};
+#![feature(yeet_expr)]
+
+use core::fmt;
+use error_stack::{Context, Report, Result, ResultExt};
+use glam::IVec2;
 use std::{collections::HashSet, str::FromStr};
 
 const __DAY_HEADER: &str = "
@@ -11,33 +14,41 @@ const __DAY_HEADER: &str = "
 ╚═════╝ ╚═╝  ╚═╝   ╚═╝        ╚═════╝  ╚════╝ ";
 
 pub fn main() -> eyre::Result<()> {
+    const INPUT: &str = include_str!("../../input/09");
+
     println!("Day 9.");
 
-    let input = include_str!("../../input/09");
-
-    println!("Problem 1: {}", p1(input)?);
-    println!("Problem 2: {}", p2(input)?);
+    println!("Problem 1: {}", p1(INPUT).unwrap());
+    println!("Problem 2: {}", p2(INPUT)?);
 
     Ok(())
 }
 
-use std::f32::consts::SQRT_2;
+#[derive(Debug)]
+struct Day9Error;
+impl fmt::Display for Day9Error {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str("An error occured while solving day 9.")
+    }
+}
+impl Context for Day9Error {}
 
-fn p1(input: &str) -> eyre::Result<usize> {
+fn p1(input: &str) -> Result<usize, Day9Error> {
     let mut visited_map = HashSet::new();
-    let mut head = Point::new(0, 0);
-    let mut tail = Point::new(0, 0);
+    let mut head = IVec2::new(0, 0);
+    let mut tail = IVec2::new(0, 0);
 
-    for line in input.lines() {
-        let split = line.split(' ').collect::<Vec<&str>>();
-        let transform: Point = split[0].parse()?;
-        let repititions = split[1].parse::<i32>()?;
-
-        for _ in 0..repititions {
+    for command in input
+        .lines()
+        .map(FromStr::from_str)
+        .collect::<Result<Vec<Command>, ParseCommandError>>()
+        .change_context(Day9Error)
+        .attach_printable("Input is not a valid list of commands.")?
+    {
+        for _ in 0..command.repeat {
             let temp = head;
-            head += transform;
-            if head.distance(&tail) > SQRT_2 {
-                // tail = head - transform;
+            head += command.direction;
+            if head.distance_squared(tail) > 2 {
                 tail = temp;
             }
             visited_map.insert(tail);
@@ -50,56 +61,49 @@ fn p2(_input: &str) -> eyre::Result<&str> {
     Ok("todo!")
 }
 
-impl FromStr for Point {
-    type Err = eyre::Report;
+struct Command {
+    direction: IVec2,
+    repeat: usize,
+}
 
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s {
-            "U" => Ok(Point { x: 0, y: 1 }),
-            "D" => Ok(Point::new(0, -1)),
-            "R" => Ok(Point::new(1, 0)),
-            "L" => Ok(Point::new(-1, 0)),
-            _ => Err(eyre::eyre!("unknown ident")),
-        }
+#[derive(Debug)]
+struct ParseCommandError;
+
+impl fmt::Display for ParseCommandError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str("Failed to parse text as a command.")
     }
 }
 
-#[derive(Clone, Copy, Hash, Eq, PartialEq)]
-struct Point {
-    x: i32,
-    y: i32,
-}
+impl Context for ParseCommandError {}
 
-impl AddAssign for Point {
-    fn add_assign(&mut self, rhs: Self) {
-        self.x += rhs.x;
-        self.y += rhs.y;
-    }
-}
+impl FromStr for Command {
+    type Err = Report<ParseCommandError>;
 
-impl SubAssign for Point {
-    fn sub_assign(&mut self, rhs: Self) {
-        self.x -= rhs.x;
-        self.y -= rhs.y;
-    }
-}
-impl Sub for Point {
-    type Output = Point;
+    fn from_str(s: &str) -> std::result::Result<Self, Self::Err> {
+        let (direction, repeat) = s.split_once(' ').ok_or_else(|| {
+            Report::new(ParseCommandError).attach_printable(format!(
+                "Expected (exactly) two space sperated values in {s:?}."
+            ))
+        })?;
 
-    fn sub(mut self, rhs: Self) -> Self::Output {
-        self -= rhs;
-        self
-    }
-}
+        let direction = match direction {
+            "U" => IVec2 { x: 0, y: 1 },
+            "D" => IVec2::new(0, -1),
+            "R" => IVec2::new(1, 0),
+            "L" => IVec2::new(-1, 0),
+            _ => {
+                do yeet Report::new(ParseCommandError).attach_printable(format!(
+                    "Expected a direction indicator from [U, D, L, R] found {direction:?}."
+                ))
+            }
+        };
 
-impl Point {
-    fn new(x: i32, y: i32) -> Point {
-        Point { x, y }
-    }
+        let repeat = repeat
+            .parse::<usize>()
+            .change_context(ParseCommandError)
+            .attach_printable_lazy(|| format!("failed to parse {repeat} as an usize."))?;
 
-    fn distance(&self, other: &Point) -> f32 {
-        let x = (self.x - other.x).pow(2);
-        let y = (self.y - other.y).pow(2);
-        ((x + y) as f32).sqrt()
+        Ok(Command { direction, repeat })
     }
 }

@@ -6,6 +6,8 @@ edition = "2021"
 [dependencies]
 eyre.workspace = true
 regex.workspace = true
+glam = "0.24"
+error-stack.workspace = true
 
 [[bin]]
 name = "2022-09"

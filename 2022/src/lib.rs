@@ -4,6 +4,7 @@ pub use std::io;
 use std::ops::FromResidual;
 
 pub struct W<T>(T);
+
 impl<T> std::ops::Try for W<Option<T>> {
     type Output = T;
 

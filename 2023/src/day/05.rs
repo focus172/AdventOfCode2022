@@ -13,6 +13,7 @@ fn main() -> Result<()> {
 
     println!("Problem 1: {}", p1(&almanac));
     println!("Problem 2: {}", p2(&almanac));
+    // println!("Problem 2: {}", p2_optimized(&almanac));
 
     Ok(())
 }
@@ -164,16 +165,39 @@ fn p1(almanac: &Almanac) -> usize {
         .unwrap()
 }
 
+// Everyone will starve if you only plant such a small number of seeds.
+// Re-reading the almanac, it looks like the seeds: line actually
+// describes ranges of seed numbers.
+//
+// The values on the initial seeds: line come in pairs. Within each
+// pair, the first value is the start of the range and the second
+// value is the length of the range. So, in the first line of the
+// example above:
+//
+// seeds: 79 14 55 13
+//
+// This line describes two ranges of seed numbers to be planted in
+// the garden. The first range starts with seed number 79 and contains
+// 14 values: 79, 80, ..., 91, 92. The second range starts with seed
+// number 55 and contains 13 values: 55, 56, ..., 66, 67.
+//
+// Now, rather than considering four seed numbers, you need to consider
+// a total of 27 seed numbers.
+//
+// In the above example, the lowest location number can be obtained
+// from seed number 82, which corresponds to soil 84, fertilizer 84,
+// water 84, light 77, temperature 45, humidity 46, and location 46.
+// So, the lowest location number is 46.
+//
+// Consider all of the initial seed numbers listed in the ranges on
+// the first line of the almanac. What is the lowest location number
+// that corresponds to any of the initial seed numbers?
 fn p2(almanac: &Almanac) -> usize {
     almanac
         .seeds
         .array_windows()
         .step_by(2)
         .flat_map(|[start, len]| *start..start + len)
-        // .flat_map(|range| {
-        //     dbg!(&range);
-        //     range
-        // })
         .map(|s| almanac.seed_to_soil.get(&s))
         .map(|s| almanac.soil_to_fert.get(&s))
         .map(|s| almanac.fert_to_watr.get(&s))
@@ -183,6 +207,32 @@ fn p2(almanac: &Almanac) -> usize {
         .map(|s| almanac.humd_to_loct.get(&s))
         .min()
         .unwrap()
+}
+
+#[allow(unused)]
+fn p2_optimized(almanac: &Almanac) -> usize {
+    let spans = almanac
+        .seeds
+        .array_windows()
+        .step_by(2)
+        .map(|[start, len]| *start..start + len)
+        .collect();
+    // dbg!(&spans);
+    let spans = almanac.seed_to_soil.transmute(spans);
+    // dbg!(&spans);
+    let spans = almanac.soil_to_fert.transmute(spans);
+    // dbg!(&spans);
+    let spans = almanac.fert_to_watr.transmute(spans);
+    // dbg!(&spans);
+    let spans = almanac.watr_to_lght.transmute(spans);
+    // dbg!(&spans);
+    let spans = almanac.lght_to_temp.transmute(spans);
+    // dbg!(&spans);
+    let spans = almanac.temp_to_humd.transmute(spans);
+    // dbg!(&spans);
+    let spans = almanac.humd_to_loct.transmute(spans);
+    // dbg!(&spans);
+    spans.into_iter().map(|range| range.start).min().unwrap()
 }
 
 #[derive(Debug)]
@@ -265,6 +315,43 @@ impl Ranges {
             .iter()
             .find_map(|range| range.get(index))
             .unwrap_or(*index)
+    }
+
+    pub fn transmute(&self, spans: Vec<Range<usize>>) -> Vec<Range<usize>> {
+        // dbg!(&self.spans);
+        spans
+            .into_iter()
+            .flat_map(|range| {
+                // TODO: handle the mapping of missing values
+                // they should map to themselves but right now they map to nothing
+                self.spans.iter().flat_map(move |span| {
+                    if span.src.end < range.start {
+                        return None;
+                    }
+                    let starts_in = span.src.contains(&range.start);
+                    let ends_in = span.src.contains(&range.end);
+                    if starts_in {
+                        let start_offset = range.start - span.src.start;
+                        if range.end < span.src.end {
+                            assert!(range.end < span.src.end);
+                            let end_offset = span.src.end - range.end;
+                            Some(span.dst.start + start_offset..span.dst.end - end_offset)
+                        } else {
+                            Some(span.dst.start + start_offset..span.dst.end)
+                        }
+                    } else {
+                        assert!(range.start < span.src.start);
+                        if ends_in {
+                            assert!(range.end < span.src.end);
+                            let end_offset = span.src.end - range.end;
+                            Some(span.dst.start..span.dst.end - end_offset)
+                        } else {
+                            None
+                        }
+                    }
+                })
+            })
+            .collect()
     }
 }
 
