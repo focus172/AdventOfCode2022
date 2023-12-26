@@ -11,9 +11,9 @@ all:
 day number:
     cargo run -q --bin 2023-{{number}}
 
-day-06:
-    clang++ src/day/06.cpp -o build/06
-    ./build/06 < ./input/06
+# day-06:
+#    clang++ src/day/06.cpp -o build/06
+#    ./build/06 < ./input/06
 
 py number:
     python src/day/{{number}}.py

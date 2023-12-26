@@ -6,6 +6,7 @@ edition = "2021"
 [dependencies]
 eyre.workspace = true
 regex.workspace = true
+error-stack.workspace = true
 
 [[bin]]
 name = "2023-01"
@@ -26,3 +27,7 @@ path = "./src/day/04.rs"
 [[bin]]
 name = "2023-05"
 path = "./src/day/05.rs"
+
+[[bin]]
+name = "2023-06"
+path = "./src/day/06.rs"
