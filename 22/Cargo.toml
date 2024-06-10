@@ -3,11 +3,13 @@ name = "aoc-2022"
 version = "0.1.0"
 edition = "2021"
 
+[workspace.dependencies]
+
 [dependencies]
-eyre.workspace = true
-regex.workspace = true
-glam = "0.24"
-error-stack.workspace = true
+eyre = "0.6"
+regex = "1"
+error-stack = "0.4"
+glam = "0.28"
 
 [[bin]]
 name = "2022-09"
