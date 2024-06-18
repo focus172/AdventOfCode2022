@@ -1,4 +1,7 @@
 # 2022
+## Languges
+Written in Java and Kotlin.
+
 - [X] Day 01 - Java
 - [X] Day 02 - Java
 - [X] Day 03 - Java

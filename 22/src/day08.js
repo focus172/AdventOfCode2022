@@ -6,7 +6,6 @@ console.log("Problem 1: " + problem1(dataArray));
 console.log("Problem 2: " + problem2(dataArray));
 
 function problem1(dataLines) {
-
     var positionMap = new Map();
 
     // from the left

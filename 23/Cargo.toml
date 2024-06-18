@@ -4,9 +4,9 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-eyre.workspace = true
-regex.workspace = true
-error-stack.workspace = true
+eyre = "0.6"
+regex = "1"
+error-stack = "0.4"
 
 [[bin]]
 name = "2023-01"
