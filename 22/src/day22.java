@@ -1,11 +1,9 @@
-package days;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
-import helpers.Day22Maze;
-import helpers.FileUtils;
-
-public class Day22 {
-    public static void main (String [] args) {
-        String raw = rawData();
+public class day22 {
+    public static void main (String [] args) throws Exception {
+        String raw = inputData();
         String[] split = splitData(raw);
         String board = split[0];
         String guide = split[1];
@@ -53,12 +51,12 @@ public class Day22 {
         return data.split("\n\n");
     }
 
-    private static String rawData() {
-        return FileUtils.fileToString("src/Inputs/Day22Input.txt");
+    private static String inputData() throws Exception {
+        return new String(Files.readAllBytes(Paths.get("./input/22")));
     }
 }
 
-public class Day22Maze {
+class Day22Maze {
 
     public int facing = 0; //Facing is 0 for right (>), 1 for down (v), 2 for left (<), and 3 for up (^)
     public int y;

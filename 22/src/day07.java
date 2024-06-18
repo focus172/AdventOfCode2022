@@ -75,7 +75,6 @@ public class day07 {
 
     }
 
-
     private static TreeObject makeFileSystem(String[] commandLines) {
         TreeObject rootDirPointer = new TreeObject("", null, true, 0);
         TreeObject curDir = rootDirPointer;
@@ -111,7 +110,6 @@ public class day07 {
         rootDirPointer.getSize(); //this will update all the sizes of the directories
         return rootDirPointer;
     }
-
 
     private static String get_input() throws Exception {
         return new String(Files.readAllBytes(Paths.get("./input/07")));
@@ -155,7 +153,7 @@ class TreeObject {
     }
 }
 
-// class Result<T, E> {
+//class Result<T, E> {
 //     public T ok;
 //     public E err;
 //
@@ -178,4 +176,4 @@ class TreeObject {
 //             alt
 //         }
 //     }
-// }
+//}
