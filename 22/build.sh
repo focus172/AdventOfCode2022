@@ -24,7 +24,7 @@ build() {
 
 mkdir -p build
 
-for d in $(seq 25); do
+for d in $(seq 12); do
     build "$(printf "day%02d\n" $d)"
 done
 

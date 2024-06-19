@@ -2,6 +2,7 @@ package days
 
 import helpers.FileUtils
 import helpers.Day25SNAFUNumber
+import java.lang.Exception
 
 object Day25 {
     @JvmStatic
@@ -26,10 +27,7 @@ object Day25 {
     }
 }
 
-import java.lang.Exception
-
 class Day25SNAFUNumber {
-
     var representation: String
     var value: Long
     private val valueMap = generateMap()

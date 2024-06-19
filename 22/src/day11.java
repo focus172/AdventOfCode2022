@@ -4,17 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Collections;
+import java.util.function.UnaryOperator;
 
 public class day11 {
     public static void main(String[] args) throws Exception {
         String data = inputData();
         System.out.println("Problem 1: " + problem1(data)); // A: 57348 (236, 243)
-        // too low 851487268 (118307, 116108)
-        System.out.println("Problem 2: " + problem2(data));
-
+        System.out.println("Problem 2: " + problem2(data)); // A: 14106266886 (121166, 116421)
     }
 
     private static String problem1(String data) throws Exception {
+        return problemSolver(data, 20, true);
+    }
+
+    private static String problem2(String data) throws Exception {
+        return problemSolver(data, 10000, false);
+    }
+
+    private static String problemSolver(String data, int iterations, boolean concernLowers) throws Exception {
         ArrayList<MonkeyItem> mkitems = new ArrayList<>();
         ArrayList<Monkey>     monkeys = new ArrayList<>();
 
@@ -23,56 +30,42 @@ public class day11 {
             monkeys.add(m);
         }
 
-        for (int i = 0; i < 20; i++) {
+        long gcd = 1;
+        for (Monkey monkey : monkeys) {
+            gcd *= monkey.test;
+        }
+
+        for (int i = 0; i < iterations; i++) {
             for (Monkey monkey : monkeys) {
-                updateMonkey1(monkey, mkitems);
+                updateMonkey(monkey, gcd, concernLowers, mkitems);
             }
         }
 
-        //for (Monkey monkey : monkeys) {
-        //    System.out.println("Monkey " + monkey.id + ": " + monkey.inspections_count + " inspections.");
-        //}
-
         monkeys.sort((l, r) -> {
             // this comparison is in reverse to sort from high to low
-            return Integer.compare(r.inspections_count, l.inspections_count);
+            return Long.compare(r.inspectionCount, l.inspectionCount);
         });
 
-        int c1 = monkeys.get(0).inspections_count;
-        int c2 = monkeys.get(1).inspections_count;
+        long c1 = monkeys.get(0).inspectionCount;
+        long c2 = monkeys.get(1).inspectionCount;
 
         return String.format("%d (%d, %d)", c1 * c2, c1, c2); 
     }
 
-    private static int problem2(String data) {
-        return 0;
-    }
-
-    public static void updateMonkey1(Monkey m, ArrayList<MonkeyItem> items) {
+    public static void updateMonkey(Monkey m, long gcd, boolean concernLowers, ArrayList<MonkeyItem> items) {
         for (MonkeyItem item : items) {
             if (item.owner != m.id) continue;
 
-            m.inspections_count++;
+            m.inspectionCount++;
 
-            item.cncrn = m.change.update(item.cncrn);
-            item.cncrn /= 3;
-            if (item.cncrn % m.test == 0) {
-                item.owner = m.throw_t;
-            } else {
-                item.owner = m.throw_f;
-            }
-        }
-    }
+            item.concern = m.change.apply(item.concern);
 
-    public static void updateMonkey2(Monkey m, ArrayList<MonkeyItem> items) {
-        for (MonkeyItem item : items) {
-            if (item.owner != m.id) continue;
+            if (concernLowers) item.concern /= 3;
 
-            m.inspections_count++;
+            // this `should` have no effect on any checks
+            item.concern = item.concern % gcd;
 
-            item.cncrn = m.change.update(item.cncrn);
-            // item.cncrn /= 3;
-            if (item.cncrn % m.test == 0) {
+            if (item.concern % m.test == 0) {
                 item.owner = m.throw_t;
             } else {
                 item.owner = m.throw_f;
@@ -87,26 +80,22 @@ public class day11 {
 
 class MonkeyItem {
     public int owner;
-    public int cncrn;
+    public long concern;
 
-    MonkeyItem(int owner, int concern) {
+    MonkeyItem(int owner, long concern) {
         this.owner = owner;
-        this.cncrn = concern;
+        this.concern = concern;
     }
-}
-
-interface MonkeyConcernLambda {
-    int update(int c);
 }
 
 class Monkey {
     int id;
-    MonkeyConcernLambda change;
+    UnaryOperator<Long> change;
     int test; // number to check if divisable
     int throw_t;
     int throw_f;
 
-    int inspections_count = 0;
+    long inspectionCount = 0;
 
     /// ```monkey
     /// Monkey 0:
@@ -122,39 +111,35 @@ class Monkey {
 
         // parsing id
         this.id = Integer.parseInt(lines[0].substring(7, 8));
-        // System.out.println("Got id: " + id);
 
         // parse items
         for (String item : lines[1].substring(17).split(",")) {
             items.add(new MonkeyItem(this.id, Integer.parseInt(item.substring(1))));
         }
 
-        // HACK parse function
-        switch (lines[2].substring(19)) {
-            case "old * old" -> this.change = (c) -> { return c * c; };
-            case "old * 19" -> this.change = (c) -> { return c * 19; };
-            case "old * 13" -> this.change = (c) -> { return c * 13; };
-            case "old + 7" -> this.change = (c) -> { return c + 7; };
-            case "old + 5" -> this.change = (c) -> { return c + 5; };
-            case "old + 4" -> this.change = (c) -> { return c + 4; };
-            case "old + 3" -> this.change = (c) -> { return c + 3; };
-            case "old + 1" -> this.change = (c) -> { return c + 1; };
+        // HACK: parse function
+        this.change = switch (lines[2].substring(19)) {
+            case "old * old" -> (c) -> { return c * c; };
+            case "old * 19" -> (c) -> { return c * 19; };
+            case "old * 13" -> (c) -> { return c * 13; };
+            case "old + 7" -> (c) -> { return c + 7; };
+            case "old + 5" -> (c) -> { return c + 5; };
+            case "old + 4" -> (c) -> { return c + 4; };
+            case "old + 3" -> (c) -> { return c + 3; };
+            case "old + 1" -> (c) -> { return c + 1; };
             default -> {
-                System.out.println("Unhandled case: " + lines[2].substring(19));
-                this.change = (c) -> {return c;};
+                System.err.println("Unhandled function case: " + lines[2].substring(19));
+                throw new Exception();
             }
         };
 
         // parse test
         this.test = Integer.parseInt(lines[3].substring(21));
-        // System.out.println("Found test: "+ test);
 
         // parse true throw
         this.throw_t = Integer.parseInt(lines[4].substring(29));
-        // System.out.println("Found true throw: "+ throw_t);
 
         // parse false throw
         this.throw_f = Integer.parseInt(lines[5].substring(30));
-        // System.out.println("Found false throw: "+ throw_f);
     }
 }

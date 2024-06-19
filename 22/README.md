@@ -7,15 +7,15 @@ Written in Java and Kotlin.
 - [X] Day 03 - Java
 - [X] Day 04 - Java
 - [X] Day 05 - Java
-- [X] Day 06 - Kotlin
+- [X] Day 06 - Java
 - [X] Day 07 - Java
-- [X] Day 08 - Javascript
-- [ ] Day 09 - Rust
+- [ ] Day 08 - Java
+- [ ] Day 09 - Java
 - [X] Day 10 - Rust
-- [ ] Day 11
-- [ ] Day 12 - Elixir
+- [X] Day 11 - Java
+- [ ] Day 12 - Java
 - [X] Day 13 - Rust
-- [ ] Day 14 - C Sharp
+- [ ] Day 14 - Kotlin
 - [X] Day 15 - Rust
 - [ ] Day 16
 - [ ] Day 17
